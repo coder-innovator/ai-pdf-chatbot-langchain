@@ -1,5 +1,5 @@
 import { VectorStoreRetriever } from '@langchain/core/vectorstores';
-import { OpenAIEmbeddings } from '@langchain/openai';
+import { HuggingFaceTransformersEmbeddings } from '@langchain/community/embeddings/hf_transformers';
 import { SupabaseVectorStore } from '@langchain/community/vectorstores/supabase';
 import { createClient } from '@supabase/supabase-js';
 import { RunnableConfig } from '@langchain/core/runnables';
@@ -16,8 +16,8 @@ export async function makeSupabaseRetriever(
       'SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY environment variables are not defined',
     );
   }
-  const embeddings = new OpenAIEmbeddings({
-    model: 'text-embedding-3-small',
+  const embeddings = new HuggingFaceTransformersEmbeddings({
+    model: 'Xenova/all-MiniLM-L6-v2',
   });
   const supabaseClient = createClient(
     process.env.SUPABASE_URL ?? '',

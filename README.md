@@ -128,7 +128,6 @@ Create a .env file in backend:
 `cp backend/.env.example backend/.env`
 
 ```
-    OPENAI_API_KEY=your-openai-api-key-here
     SUPABASE_URL=your-supabase-url-here
     SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key-here
 
@@ -145,7 +144,6 @@ Create a .env file in backend:
 -   `LANGGRAPH_RETRIEVAL_ASSISTANT_ID`: The ID of the LangGraph assistant for question answering. Default is `retrieval_graph`.
 -   `LANGCHAIN_TRACING_V2`:  Enable tracing to debug your application on the LangSmith platform.  Set to `true` to enable.
 -   `LANGCHAIN_PROJECT`:  The name of your LangSmith project.
--   `OPENAI_API_KEY`: Your OpenAI API key.
 -   `SUPABASE_URL`: Your Supabase URL.
 -   `SUPABASE_SERVICE_ROLE_KEY`: Your Supabase service role key.
 
