@@ -6,7 +6,8 @@ import { useToast } from '@/hooks/use-toast';
 import { useRef, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Paperclip, ArrowUp, Loader2 } from 'lucide-react';
+import { Paperclip, ArrowUp, Loader2, BarChart3 } from 'lucide-react';
+import Link from 'next/link';
 import { ExamplePrompts } from '@/components/example-prompts';
 import { ChatMessage } from '@/components/chat-message';
 import { FilePreview } from '@/components/file-preview';
@@ -44,9 +45,9 @@ export default function Home() {
       if (threadId) return;
 
       try {
-        const thread = await client.createThread();
-
-        setThreadId(thread.thread_id);
+        // Generate a proper UUID for the thread
+        const generatedThreadId = crypto.randomUUID();
+        setThreadId(generatedThreadId);
       } catch (error) {
         console.error('Error creating thread:', error);
         toast({
@@ -88,14 +89,14 @@ export default function Home() {
     lastRetrievedDocsRef.current = []; // Clear the last retrieved documents
 
     try {
-      const response = await fetch('/api/chat', {
+      const response = await fetch('/api/simple-chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           message: userMessage,
-          threadId,
+          threadId: crypto.randomUUID(), // Generate unique thread ID for each request
         }),
         signal: abortController.signal,
       });
@@ -268,11 +269,27 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center p-4 md:p-24 max-w-5xl mx-auto w-full">
+      {/* Navigation Bar */}
+      <div className="w-full mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-2xl font-bold">AI Trading & Document Assistant</h1>
+            <p className="text-muted-foreground">Chat with PDFs and get trading insights</p>
+          </div>
+          <Link href="/trading">
+            <Button variant="outline" className="flex items-center space-x-2">
+              <BarChart3 className="h-4 w-4" />
+              <span>Trading Dashboard</span>
+            </Button>
+          </Link>
+        </div>
+      </div>
+
       {messages.length === 0 ? (
         <>
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
-              <p className="font-medium text-muted-foreground max-w-md mx-auto">
+              <p className="font-medium text-muted-foreground max-w-md mx-auto mb-4">
                 This ai chatbot is an example template to accompany the book:{' '}
                 <a
                   href="https://www.oreilly.com/library/view/learning-langchain/9781098167271/"
@@ -281,6 +298,9 @@ export default function Home() {
                   Learning LangChain (O'Reilly): Building AI and LLM
                   applications with LangChain and LangGraph
                 </a>
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Upload PDFs to analyze documents or visit the trading dashboard for market insights
               </p>
             </div>
           </div>

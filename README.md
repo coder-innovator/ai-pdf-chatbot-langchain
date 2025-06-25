@@ -131,6 +131,11 @@ Create a .env file in backend:
     SUPABASE_URL=your-supabase-url-here
     SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key-here
 
+    # Financial API Keys
+    ALPACA_API_KEY=your-alpaca-api-key-here
+    ALPACA_SECRET_KEY=your-alpaca-secret-key-here
+    ALPACA_BASE_URL=https://paper-api.alpaca.markets # Use https://api.alpaca.markets for live trading
+
     LANGCHAIN_TRACING_V2=true # Optional: Enable LangSmith tracing
 
     LANGCHAIN_PROJECT="pdf-chatbot" # Optional: LangSmith project name
@@ -146,6 +151,9 @@ Create a .env file in backend:
 -   `LANGCHAIN_PROJECT`:  The name of your LangSmith project.
 -   `SUPABASE_URL`: Your Supabase URL.
 -   `SUPABASE_SERVICE_ROLE_KEY`: Your Supabase service role key.
+-   `ALPACA_API_KEY`: Your Alpaca trading API key for financial data.
+-   `ALPACA_SECRET_KEY`: Your Alpaca trading secret key.
+-   `ALPACA_BASE_URL`: Alpaca API base URL (paper trading vs live trading).
 
 
 

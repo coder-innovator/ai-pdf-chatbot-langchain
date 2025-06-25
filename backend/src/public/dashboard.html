@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate Limiting Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .card h3 {
+            color: #333;
+            margin-bottom: 16px;
+            font-size: 1.2rem;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .status-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .status-item.warning {
+            border-left-color: #ffc107;
+        }
+        
+        .status-item.danger {
+            border-left-color: #dc3545;
+        }
+        
+        .provider-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .usage-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        
+        .usage-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .usage-fill.warning {
+            background: linear-gradient(90deg, #ffc107, #fd7e14);
+        }
+        
+        .usage-fill.danger {
+            background: linear-gradient(90deg, #dc3545, #e74c3c);
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background: #5a6fd8;
+        }
+        
+        .btn-test {
+            background: #28a745;
+        }
+        
+        .btn-test:hover {
+            background: #218838;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .log {
+            background: #1e1e1e;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        .timestamp {
+            color: #6c757d;
+            font-size: 12px;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ Rate Limiting Dashboard</h1>
+            <p>Monitor and manage API rate limits in real-time</p>
+        </div>
+        
+        <div class="controls">
+            <button class="btn" onclick="refreshData()">🔄 Refresh Data</button>
+            <button class="btn btn-test" onclick="testRateLimit('yahoo', 'quote')">🧪 Test Yahoo API</button>
+            <button class="btn btn-test" onclick="testRateLimit('alphavantage', 'quote')">🧪 Test AlphaVantage</button>
+        </div>
+        
+        <div class="dashboard">
+            <div class="card">
+                <h3>📊 System Overview</h3>
+                <div id="overview" class="loading">Loading...</div>
+            </div>
+            
+            <div class="card">
+                <h3>🏥 Provider Status</h3>
+                <div id="providers" class="loading">Loading...</div>
+            </div>
+            
+            <div class="card">
+                <h3>📈 Usage Analytics</h3>
+                <div id="analytics" class="loading">Loading...</div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3>📝 Activity Log</h3>
+            <div id="log" class="log">
+                <div class="timestamp">[Loading activity log...]</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let logEntries = [];
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = `[${timestamp}] ${message}`;
+            logEntries.unshift(entry);
+            
+            if (logEntries.length > 20) {
+                logEntries = logEntries.slice(0, 20);
+            }
+            
+            document.getElementById('log').innerHTML = logEntries.join('<br>');
+        }
+        
+        async function fetchData(endpoint) {
+            try {
+                const response = await fetch(`/api/rate-limits/${endpoint}`);
+                return await response.json();
+            } catch (error) {
+                log(`❌ Error fetching ${endpoint}: ${error.message}`, 'error');
+                return null;
+            }
+        }
+        
+        async function refreshData() {
+            log('🔄 Refreshing dashboard data...');
+            
+            // Fetch status
+            const status = await fetchData('status');
+            if (status) {
+                updateOverview(status);
+                updateProviders(status);
+                log('✅ Status data updated');
+            }
+            
+            // Fetch analytics
+            const analytics = await fetchData('analytics');
+            if (analytics) {
+                updateAnalytics(analytics);
+                log('✅ Analytics data updated');
+            }
+        }
+        
+        function updateOverview(data) {
+            const overview = document.getElementById('overview');
+            overview.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; font-weight: bold; color: #667eea;">${data.summary.totalProviders}</div>
+                        <div style="color: #6c757d;">Total Providers</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; font-weight: bold; color: #28a745;">$${data.summary.dailyCost.toFixed(2)}</div>
+                        <div style="color: #6c757d;">Daily Cost</div>
+                    </div>
+                </div>
+                <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px;">
+                    <small style="color: #6c757d;">Last updated: ${new Date(data.timestamp).toLocaleString()}</small>
+                </div>
+            `;
+        }
+        
+        function updateProviders(data) {
+            const providers = document.getElementById('providers');
+            const providerHtml = data.providers.map(provider => {
+                const utilizationPercent = provider.usage.utilizationPercent || 0;
+                let statusClass = '';
+                let fillClass = '';
+                
+                if (utilizationPercent >= 90) {
+                    statusClass = 'danger';
+                    fillClass = 'danger';
+                } else if (utilizationPercent >= 75) {
+                    statusClass = 'warning';
+                    fillClass = 'warning';
+                }
+                
+                return `
+                    <div class="status-item ${statusClass}">
+                        <div class="provider-name">${provider.provider.toUpperCase()}</div>
+                        <div style="font-size: 12px; color: #6c757d; margin-bottom: 5px;">
+                            ${provider.usage.current}/${provider.usage.limit} calls (${provider.usage.remaining} remaining)
+                        </div>
+                        <div class="usage-bar">
+                            <div class="usage-fill ${fillClass}" style="width: ${utilizationPercent}%"></div>
+                        </div>
+                        <div style="font-size: 11px; color: #6c757d;">
+                            Priority: ${provider.priority} • Status: ${provider.status}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            providers.innerHTML = providerHtml;
+        }
+        
+        function updateAnalytics(data) {
+            const analytics = document.getElementById('analytics');
+            analytics.innerHTML = `
+                <div style="display: grid; gap: 10px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Total Requests:</span>
+                        <strong>${data.totalRequests}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Total Cost:</span>
+                        <strong>$${data.totalCost.toFixed(2)}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Most Used:</span>
+                        <strong>${data.mostUsedProvider ? data.mostUsedProvider.provider : 'None'}</strong>
+                    </div>
+                </div>
+            `;
+        }
+        
+        async function testRateLimit(provider, endpoint) {
+            log(`🧪 Testing rate limit for ${provider}/${endpoint}...`);
+            
+            try {
+                const response = await fetch(`/api/rate-limits/test/${provider}/${endpoint}`);
+                const result = await response.json();
+                
+                if (result.result.allowed) {
+                    log(`✅ ${provider} test successful - ${result.result.usage.remaining} calls remaining`);
+                } else {
+                    log(`⚠️ ${provider} rate limit exceeded - ${result.result.reason}`);
+                }
+                
+                // Refresh data after test
+                setTimeout(refreshData, 500);
+                
+            } catch (error) {
+                log(`❌ Test failed for ${provider}: ${error.message}`);
+            }
+        }
+        
+        // Auto-refresh every 30 seconds
+        setInterval(refreshData, 30000);
+        
+        // Initial load
+        document.addEventListener('DOMContentLoaded', () => {
+            log('🚀 Rate Limiting Dashboard loaded');
+            refreshData();
+        });
+    </script>
+</body>
+</html>

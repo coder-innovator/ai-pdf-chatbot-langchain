@@ -15,7 +15,7 @@ export const IndexStateAnnotation = Annotation.Root({
    */
   docs: Annotation<
     Document[],
-    Document[] | { [key: string]: any }[] | string[] | string | 'delete'
+    Document[] | { [key: string]: unknown }[] | string[] | string | 'delete'
   >({
     default: () => [],
     reducer: reduceDocs,

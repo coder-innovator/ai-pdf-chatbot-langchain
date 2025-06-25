@@ -1,0 +1,114 @@
+  ▲ Next.js 14.2.16
+  - Local:        http://localhost:3000
+  - Environments: .env
+  - Experiments (use with caution):
+    · webpackBuildWorker
+    · parallelServerCompiles
+    · parallelServerBuildTraces
+
+ ✓ Starting...
+ ✓ Ready in 1153ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1669ms (656 modules)
+ HEAD / 200 in 1764ms
+ ✓ Compiled in 194ms (333 modules)
+ ✓ Compiled /trading in 295ms (664 modules)
+ ⨯ app/trading/page.tsx (33:20) @ BarChart3
+ ⨯ ReferenceError: BarChart3 is not defined
+    at TradingPage (./app/trading/page.tsx:96:125)
+digest: "3616779996"
+[0m [90m 31 |[39m               [33m<[39m[33mLink[39m href[33m=[39m[32m"/enhanced-trading"[39m[33m>[39m[0m
+[0m [90m 32 |[39m                 [33m<[39m[33mButton[39m variant[33m=[39m[32m"default"[39m[33m>[39m[0m
+[0m[31m[1m>[22m[39m[90m 33 |[39m                   [33m<[39m[33mBarChart3[39m className[33m=[39m[32m"h-4 w-4 mr-2"[39m [33m/[39m[33m>[39m[0m
+[0m [90m    |[39m                    [31m[1m^[22m[39m[0m
+[0m [90m 34 |[39m                   [33mEnhanced[39m [33mPlatform[39m[0m
+[0m [90m 35 |[39m                 [33m<[39m[33m/[39m[33mButton[39m[33m>[39m[0m
+[0m [90m 36 |[39m               [33m<[39m[33m/[39m[33mLink[39m[33m>[39m[0m
+ GET /trading 500 in 359ms
+ ✓ Compiled in 235ms (678 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /trading 200 in 39ms
+ GET /trading 200 in 16ms
+ ✓ Compiled / in 38ms (352 modules)
+ GET / 200 in 77ms
+ ✓ Compiled /enhanced-trading in 231ms (745 modules)
+ GET /enhanced-trading 200 in 269ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /trading 200 in 17ms
+ ✓ Compiled /demo in 150ms (775 modules)
+ GET /demo 200 in 205ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /trading 200 in 15ms
+ GET /trading 200 in 39ms
+ GET / 200 in 19ms
+ ✓ Compiled /api/chat in 289ms (163 modules)
+ ⨯ Error: LANGCHAIN_API_KEY is not set
+    at <unknown> (webpack-internal:///(rsc)/./lib/langgraph-server.ts:21)
+    at createServerClient (webpack-internal:///(rsc)/./lib/langgraph-server.ts:21:15)
+    at eval (webpack-internal:///(rsc)/./lib/langgraph-server.ts:34:31)
+    at (rsc)/./lib/langgraph-server.ts (file:///Users/devanshchaudhary/ai-pdf-chatbot-langchain/frontend/.next/server/app/api/chat/route.js:95:1)
+    at __webpack_require__ (file:///Users/devanshchaudhary/ai-pdf-chatbot-langchain/frontend/.next/server/edge-runtime-webpack.js:37:33)
+    at fn (file:///Users/devanshchaudhary/ai-pdf-chatbot-langchain/frontend/.next/server/edge-runtime-webpack.js:293:21)
+    at eval (webpack-internal:///(rsc)/./app/api/chat/route.ts:7:79)
+    at (rsc)/./app/api/chat/route.ts (file:///Users/devanshchaudhary/ai-pdf-chatbot-langchain/frontend/.next/server/app/api/chat/route.js:62:1)
+    at __webpack_require__ (file:///Users/devanshchaudhary/ai-pdf-chatbot-langchain/frontend/.next/server/edge-runtime-webpack.js:37:33)
+    at fn (file:///Users/devanshchaudhary/ai-pdf-chatbot-langchain/frontend/.next/server/edge-runtime-webpack.js:293:21)
+    at eval (webpack-internal:///(rsc)/../node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fapi%2Fchat%2Froute&page=%2Fapi%2Fchat%2Froute&appPaths=&pagePath=private-next-app-dir%2Fapi%2Fchat%2Froute.ts&appDir=%2FUsers%2Fdevanshchaudhary%2Fai-pdf-chatbot-langchain%2Ffrontend%2Fapp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=%2FUsers%2Fdevanshchaudhary%2Fai-pdf-chatbot-langchain%2Ffrontend&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D!./app/api/chat/route.ts?__next_edge_ssr_entry__:13:137)
+ ✓ Compiled /_error in 443ms (965 modules)
+ POST /api/chat 500 in 885ms
+ ✓ Compiled in 239ms (749 modules)
+ POST /api/chat 400 in 48ms
+Streaming error:  [Error: HTTP 400: {"success":false,"error":{"issues":[{"validation":"uuid","code":"invalid_string","message":"Invalid uuid","path":["thread_id"]}],"name":"ZodError"}}] {
+  status: 400,
+  text: '{"success":false,"error":{"issues":[{"validation":"uuid","code":"invalid_string","message":"Invalid uuid","path":["thread_id"]}],"name":"ZodError"}}',
+  response: undefined,
+  attemptNumber: 1,
+  retriesLeft: 4
+}
+ POST /api/chat 200 in 13ms
+ GET / 200 in 45ms
+ GET / 200 in 26ms
+ POST /api/chat 200 in 575ms
+ ✓ Compiled in 394ms (933 modules)
+ ✓ Compiled in 312ms (933 modules)
+Streaming error:  [Error: HTTP 422: Thread is already running a task. Wait for it to finish or choose a different multitask strategy.] {
+  status: 422,
+  text: 'Thread is already running a task. Wait for it to finish or choose a different multitask strategy.',
+  response: undefined,
+  attemptNumber: 1,
+  retriesLeft: 4
+}
+ POST /api/chat 200 in 58ms
+ GET / 200 in 76ms
+Streaming error:  [Error: HTTP 422: Thread is already running a task. Wait for it to finish or choose a different multitask strategy.] {
+  status: 422,
+  text: 'Thread is already running a task. Wait for it to finish or choose a different multitask strategy.',
+  response: undefined,
+  attemptNumber: 1,
+  retriesLeft: 4
+}
+ POST /api/chat 200 in 20ms
+ ✓ Compiled in 289ms (933 modules)
+Streaming error:  [Error: HTTP 422: Thread is already running a task. Wait for it to finish or choose a different multitask strategy.] {
+  status: 422,
+  text: 'Thread is already running a task. Wait for it to finish or choose a different multitask strategy.',
+  response: undefined,
+  attemptNumber: 1,
+  retriesLeft: 4
+}
+ POST /api/chat 200 in 42ms
+ ✓ Compiled in 127ms (562 modules)
+ ✓ Compiled in 183ms (1082 modules)
+ ✓ Compiled in 176ms (933 modules)
+ ✓ Compiled /api/simple-chat in 26ms (166 modules)
+ POST /api/simple-chat 200 in 4060ms
+ GET / 200 in 51ms
+ POST /api/simple-chat 200 in 3256ms
+ POST /api/simple-chat 200 in 5270ms
+ POST /api/simple-chat 200 in 3626ms
+ POST /api/simple-chat 200 in 3462ms
+ POST /api/simple-chat 200 in 3264ms
+ POST /api/simple-chat 200 in 3476ms
+ POST /api/simple-chat 200 in 3449ms
+ POST /api/simple-chat 200 in 3239ms
+ POST /api/simple-chat 200 in 4025ms

@@ -1,0 +1,8 @@
+🚀 Production server running on port 3001
+📊 Health check: http://localhost:3001/api/health
+🔧 Rate limits: http://localhost:3001/api/rate-limits/status
+2025-06-25T13:24:36.807Z - GET /api/health
+2025-06-25T13:24:42.103Z - GET /api/rate-limits/status
+2025-06-25T13:24:47.939Z - GET /api/rate-limits/test/yahoo/quote
+Received SIGTERM, shutting down gracefully
+Server closed
